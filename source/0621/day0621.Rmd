@@ -1,0 +1,35 @@
+---
+title: "day0621"
+output: 
+  html_document:
+    keep_md: true
+date: '2022-06-21'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##  빈도의 비율 구하기 
+```{r}
+a <- table(mpg1$trans)
+prop.table(a)
+
+```
+
+
+## 통계 요약 구하기 
+```{r}
+summary(iris)
+```
+
+## 행과 열의 비율 형식을 맞춘다
+```{r}
+prop.table(b, margin = 1)
+```
+
+## 소숫점 아래 자리 지정
+```{r}
+round(0.3254675899, 4)
+```
+

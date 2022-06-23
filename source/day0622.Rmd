@@ -1,0 +1,126 @@
+---
+title: "결측치 이상치 처리"
+output:
+   html_document:
+    keep_md: true
+date: '2022-06-22'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 먼저 라이브러리 불러오기
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+## 데이터 불러오기
+- 데이터를 불러오세요
+```{r}
+exam_na <- read.csv("data/exam_na.csv")
+
+```
+
+## 결측치 확인
+```{r}
+is.na(exam_na)
+```
+
+##  결측치 빈도 구하기
+- table(): 빈도구하기
+```{r}
+table(is.na(exam_na))
+table(is.na(exam_na$korean))
+summary(is.na(exam_na))
+summary(exam_na)
+```
+
+## 결측치 처리 방법
+- 제거하고 처리하기
+- 다른 값으로 대체하기 (중요)
+ + 평균 입력
+ 
+ ## (1) 결측치를 제외하고 분석하기
+```{r}
+na.rm = T 
+```
+```{r}
+mean(exam_na$korean, na.rm = T)
+```
+
+- na.omit() 
+- 결측치가 있는 행을 모두 제거
+  + 실무에서는 가급적 사용하지 말것
+
+- filter()활용
+```{r}
+exam_na %>% filter(!is.na(korean))
+```
+
+이번에는 is.na(korean)을 적용한다
+```{r}
+exam_na %>% filter(is.na(korean))
+```
+
+## 결측치를 다른 값으로 대체하기
+- imputation 참고자료
++ [A Solution to Missing Data: Imputation Using R](https://www.kdnuggets.com/2017/09/missing-data-imputation-using-r.html)
+ + [R 결측값(NA) 제거, 대체 방법](https://velog.io/@lifeisbeautiful/R-%EA%B2%B0%EC%B8%A1%EA%B0%92NA-%EC%A0%9C%EA%B1%B0-%EB%8C%80%EC%B2%B4-%EB%B0%A9%EB%B2%95)
+ 
+ 
+## 이상치
+- 데이터의 특정 값이 뭔가 '이상'이 있다
+- case1: 정해진 범주에서 벗어난 데이터
+ + 2000년 4월 30일 / 2000년 40월 30일--> 9999
+- case2: 숫자 / 아웃라이어(outlier) / 극단값
+ + 평균: 평균임금 320만원 / 손흥민 몇십억원
+
+```{r}
+mpg1_out <- read.csv("data/mpg1_out.csv")
+glimpse(mpg1_out)
+```
+
+- trans의 갯수를 구하자
+```{r}
+table(mpg1_out$trans)
+```
+
+ - ifelse 
+ - 만약 -라면, 내가 무억을 할것이다 (가정법)
+ - 만약 trans의 값이 3이라면, 결측치로 바꿔주세요. 나머지는 그대로 유지하세요
+ 
+```{r}
+mpg1_out$trans <- ifelse(mpg1_out$trans == 3, NA, mpg1_out$trans)
+table(is.na(mpg1_out$trans))
+```
+ 
+- 결측치 제거
+```{r}
+mpg1_out %>% filter(!is.na(trans))
+```
+
+```{r}
+result <- mpg1_out %>% filter(!is.na(trans))
+table(is.na(result$trans))
+```
+
+이렇게 해도 가능하다
+```{r}
+mpg1_out %>% filter(trans !=3) 
+```
+ 
+ ## 극단치 처리
+ - 숫자 데이터 boxplot()
+ - boxplot() 함수를 통해서 극단치가 있는지 없는지 확인가능
+ - 경계값:IQR + IQR * 1.5 상한 / IQR - IQR * 1.5
+```{r}
+mpg1 <- read.csv("data/mpg1.csv")
+boxplot(mpg1$cty)
+boxplot(mpg1$cty)$stats
+```
+ 
+ 
+ 
+ 

@@ -1,0 +1,32 @@
+---
+title: "R기초문법 - 기초통계"
+output: 
+  html_document:
+    keep_md: true
+date: '2022-06-21'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 데이터 불러오기 
+```{r}
+mpg1<-read.csv("data/mpg1.csv", stringsAsFactors = F)
+
+
+```
+
+
+# 통계요약 구하기 
+```{r}
+summary(iris)
+```
+ 
+ 
+# 빈도의 비율 구하기 
+```{r}
+a <- table(mpg1$trans)
+prop.table(a)
+```
+

@@ -610,3 +610,5 @@ ggplot(iris, map=aes(Sepal.Length, Sepal.Width, color=Species)) +
   
   labs(x="x", y="y", color="col", title="hahaha")
 
+
+install.packages("dplyr")
